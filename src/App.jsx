@@ -3,6 +3,7 @@ import './css/style.css'
 
 import Home from './pages/Home-page/Homepage.component'
 import MenuItems from './pages/MenuI-tems/MenuItems.components'
+import Restaurant from './components/Restaurant/Restaurant.component'
 
 
 
@@ -15,7 +16,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/menuitems' element={<MenuItems/>}/>
+        <Route path='/quick-search/:meal_id' element={<MenuItems/>}/>
+        <Route path='/Restaurant/:id' element={<Restaurant/>}/>
 
       </Routes>
       

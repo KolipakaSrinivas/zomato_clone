@@ -1,7 +1,21 @@
 import React, { Fragment } from 'react'
 
 
-function FilterOption() {
+
+
+
+
+function FilterOption(props) {
+
+    const {locationList} = props
+
+    const newLocationList = locationList.map(Location=>(
+         <option key={Location._id}>{Location.name},{Location.city}</option>
+    ))
+
+    
+
+
     return(
         <Fragment>
             <div className="food-shadow col-12 col-lg-3 col-md-4 me-5 p-3 mb-4">
@@ -16,13 +30,14 @@ function FilterOption() {
                             <span className="fa fa-eye"></span>
                         </button>
                 </div>
-                <kdiv className="collapse show" id="collapseFilter">
+                <div className="collapse show" id="collapseFilter">
                     <div>
                         <label htmlFor="" className="form-label">
                             Select Location
                         </label>
                          <select className="form-select form-select-sm">
                                <option value="">Select</option>
+                                    {newLocationList}
                         </select>
                      </div>
                 <p className="mt-4 mb-2 fw-bold">Cuisine</p>
@@ -123,7 +138,7 @@ function FilterOption() {
                 </div>
                 </div>
                     </div>
-                </kdiv>
+                </div>
             </div>
         </Fragment>
     )
