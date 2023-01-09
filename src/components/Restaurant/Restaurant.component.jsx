@@ -4,10 +4,14 @@ import {useParams} from 'react-router-dom'
 
 
 
-
-
-
+import Payment from './payment/Payment.component'
+import AddRemoveItem from './add-remove-items/Add_Remove_Items.component'
+import Carousel from './Carousel/Carousel.component'
 import {Overview,Contact} from './Overview-Contact/Overview-Contact.component'
+import ImageGallery from './image-gallery/Image-Gallery.component'
+
+
+
 
 function Restaurant() {
 
@@ -92,64 +96,101 @@ function Restaurant() {
 
     return(
         <Fragment>
+          <Payment/>
+          <AddRemoveItem/>
+          <Carousel/>
           <div className="row justify-content-center">
-        <div className="col-10">
-          <div className="row">
-            <div className="col-12 mt-5">
-              <div className="restaurant-main-image position-relative">
-                <img src={"/images/" + rDetails.image} alt="" className="" />
-                <button
-                  className="btn btn-outline-light position-absolute btn-gallery"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalGallery"
-                >
-                  Click To Get Image Gallery
-                </button>
-              </div>
-            </div>
-            <div className="col-12">
-              <h3 className="mt-4">{rDetails.name}</h3>
-              <div className="d-flex justify-content-between">
-                <ul className="list-unstyled d-flex gap-3">
+          <div className="col-10">
+          <div className="col-12 mt-5">
+          <ImageGallery/>
+          <div className="col-12">
+          <h3 className="mt-4">{rDetails.name}</h3>
+          < className="d-flex justify-content-between">
+          <ul className="list-unstyled d-flex gap-3">
                   <li
-                    className="fw-bold"
                     onClick={() => setRestDetailsToggle(true)}
+                    className="fw-bold"
                   >
                     Overview
                   </li>
                   <li
-                    className="fw-bold"
                     onClick={() => setRestDetailsToggle(false)}
+                    className="fw-bold"
                   >
                     Contact
                   </li>
                 </ul>
-                  {/* <button disabled className="btn btn-danger align-self-start">
-                    Login to place order
-                  </button> */}
-
-                  <a
+                <a
                     className="btn btn-danger align-self-start"
                     data-bs-toggle="modal"
                     href="#modalMenuList"
                     role="button"
-                    // onClick={getMenuItems}
+                    onClick={getMenuItems}
                   >
                     Show Menu List
                   </a>
+                  <hr className="mt-0" />
+                  {
+             restDetailsToggle === true ?
+             <Overview rDetails={rDetails}/>:<Contact rDetails={rDetails}/>
+           }
+          
 
-              </div>
-              <hr className="mt-0" />
-                {
-                  restDetailsToggle === true ?
-                  <Overview rDetails={rDetails}/>:<Contact rDetails={rDetails}/>
-                }
-            </div>
           </div>
-        </div>
-      </div> 
+          </div>
+          </div>
+          </div>
+          </div>  
         </Fragment>
     )
 }
 
 export default Restaurant
+
+
+
+
+/*****
+ <div className="row justify-content-center">
+            <div className="col-10">
+              <div className="row">
+                <ImageGallery rDetails={rDetails}/>
+              <div className="col-12">
+               <h3 className="mt-4">{rDetails.name}</h3>
+                 <div className="d-flex justify-content-between">
+                    <ul className="list-unstyled d-flex gap-3">
+                      <li
+                        className="fw-bold"
+                        onClick={() => setRestDetailsToggle(true)}
+                      >
+                        Overview
+                      </li>
+                      <li
+                        className="fw-bold"
+                        onClick={() => setRestDetailsToggle(false)}
+                      >
+                        Contact
+                      </li>
+                    </ul>
+                  {/* <button disabled className="btn btn-danger align-self-start">
+                    Login to place order
+                  // </button> */}
+//                   <a
+//                   className="btn btn-danger align-self-start"
+//                   data-bs-toggle="modal"
+//                   href="#modalMenuList"
+//                   role="button"
+//                // onClick={getMenuItems}
+//                 >
+//                  Show Menu List
+//               </a>
+//            </div>
+//          <hr className="mt-0" />
+//            {
+//              restDetailsToggle === true ?
+//              <Overview rDetails={rDetails}/>:<Contact rDetails={rDetails}/>
+//            }
+//        </div>
+//      </div>
+//    </div>
+//  </div>
