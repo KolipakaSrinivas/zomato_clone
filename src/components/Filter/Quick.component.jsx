@@ -64,6 +64,7 @@ function QuickSearch() {
       
       switch(Type){
 
+
         //  sort
         case "sort":
           _filterObj['sort'] = value
@@ -80,6 +81,25 @@ function QuickSearch() {
           _filterObj["l_cost"] = cost[0]
           _filterObj["h_cost"] = cost[1]
         break;
+
+       case "cuisine":
+        let checked = event.target.checked;
+        // console.log(checked);
+
+        let cuisine =
+        filterData.cuisine == undefined ? [] : [...filterData.cuisine];
+        if (checked) {
+          let isAvailable = cuisine.includes(Number(value));
+          if (isAvailable === false) cuisine.push(Number(value));
+        } else {
+          let position = cuisine.indexOf(Number(value));
+          cuisine.splice(position, 1);
+        }
+        if (cuisine.length > 0) {
+          _filterObj["cuisine"] = cuisine;
+        }
+        break;
+         
 
       }
 
@@ -113,7 +133,10 @@ function QuickSearch() {
                         locationList={locationList}
                         getFilterResult={getFilterResult}
                         />
-                     <SearchResult restaurantList={restaurantList}/>
+                     <SearchResult 
+                     restaurantList={restaurantList}
+                     getFilterResult={getFilterResult}
+                     />
                   </div>
             </div>
         </Fragment>

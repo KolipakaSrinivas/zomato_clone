@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-import Paganation from './Paganation/Paganation.component'
+// import Paganation from './Paganation/Paganation.component'
 
 
 
-function SearchResult({restaurantList}) {
+function SearchResult({restaurantList,getFilterResult}) {
   
   const navigate = useNavigate()
 
@@ -70,7 +70,18 @@ function SearchResult({restaurantList}) {
               );
             })}
 
-            <Paganation/>
+            {/* <Paganation getFilterResult={getFilterResult}/> */}
+
+            <div className="col-12 pagination d-flex justify-content-center">
+                <ul className="pages">
+                    <li>&lt;</li>
+                    <li className="active">1</li>
+                    <li value='1' onClick={(event)=>getFilterResult(event,"page")}>2</li>
+                    <li value='2' onClick={(event)=>getFilterResult(event,"page")}>3</li>
+                    <li value='3' onClick={(event)=>getFilterResult(event,"page")}>4</li>
+                    <li>&gt;</li>
+                </ul>
+            </div>
            
           </>
         )}

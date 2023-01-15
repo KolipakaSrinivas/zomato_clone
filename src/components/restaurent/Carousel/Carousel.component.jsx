@@ -4,18 +4,23 @@ import { Carousel } from "react-responsive-carousel";
 
 
 
-function CarouselGallery({rDetails}) {
+function CarouselGallery(props) {
+
+  const {rDetails} = props
+  console.log(props)
     return(
-          <Carousel showThumbs={false} infiniteLoop={true}>
-               {rDetails.thumb.map((value, index) => {
-                return (
-                  <div key={index} className="w-100">
-                    <img src={"/images/" + value} />
-                  </div>
-                );
-              })} 
+          // <Carousel showThumbs={false} infiniteLoop={true}>
+          //      {rDetails.thumb.map((value, index) => {
+          //       return (
+          //         <div key={index} className="w-100">
+          //           <img src={"/images/" + value} />
+          //         </div>
+          //       );
+          //     })} 
               
-          </Carousel>
+          // </Carousel>
+          <h1>hhhhhhhhhhh</h1>
+          
     )
 }
 
