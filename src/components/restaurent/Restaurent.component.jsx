@@ -14,10 +14,33 @@ import {Overview,Contact} from './Contact-And-Overview/Overview-and-Contact.comp
 import CarouselGallery from './Carousel/Carousel.component'
 // import PaymentSection from './AddAndRemove/AddAndRemove.component'
 // import AddAndRemoveItems from './AddAndRemove/AddAndRemove.component'
+import Header from '../common/Header.componet'
 
 
 
 function Restaurent() {
+
+
+
+    let getUserLoginData = () => {
+        // read data from local storage
+        let token = localStorage.getItem("batch64token");
+        if (token == null) {
+          return false;
+        } else {
+          // decode a jwt token =>
+          try {
+            let result = jwtDecode(token);
+            return result;
+          } catch (error) {
+            // remove a token from localStorage
+            localStorage.removeItem("batch64token");
+            return false;
+          }
+        }
+      };
+
+      let [user, setUser] = useState(getUserLoginData());
 
 
     let initRestaurant = {
@@ -44,6 +67,15 @@ function Restaurent() {
     // console.log(id)
 
 
+     // useStae
+     let [rDetails, setRDetails] = useState({...initRestaurant});
+     let [restDetailsToggle, setRestDetailsToggle] = useState(true);
+     // const [user,setUser] = useState(true)
+    //  let [user, setUser] = useState(getUserLoginData());
+     const [menuList, setMenuList] = useState([]);
+     let [totalPrice, setTotalPrice] = useState(0);
+
+
 
 
 
@@ -59,37 +91,66 @@ function Restaurent() {
         }
       };
 
-
-    const  getUserLoginData = () => {
-         // read data from local storage
-            let token = localStorage.getItem("batch64token");
-                if (token == null) {
-                    return false;
-                } else {
-                    // decode a jwt token =>
-                try {
-                    let result = jwtDecode(token);
-                     return result;
-                } catch (error) {
-                      // remove a token from localStorage
-                    localStorage.removeItem("batch64token");
-                    return false;
-                }
-            }
-    }
+      const addItem = (index) => {
+        let _menuList = [..._menuList]; // re-create array
+            _menuList[index].qty += 1;
+            _menuList(_menuList);
+    
+            let newTotal = totalPrice + _menuList[index].price;
+            setTotalPrice(newTotal);
+         };
+    
 
 
-    const getMenuItems = async () => {
-            let url = `http://localhost:5003/api/get-menu-items/${id}`;
-            let { data } = await axios.get(url);
-                 console.log(data);
-            if (data.status === true) {
-                setMenuList([...data.menu_items]);
-            } else {
-                setMenuList([]);
-            }
-                setTotalPrice(0);
-      };
+
+      const getMenuItems = async () => {
+        let url = `http://localhost:5003/api/get-menu-items/${id}`;
+        let { data } = await axios.get(url);
+             console.log(data);
+        if (data.status === true) {
+            setMenuList([...data.menu_items]);
+        } else {
+            setMenuList([]);
+        }
+            setTotalPrice(0);
+  };
+
+
+
+  
+
+
+let removeItem = (index) => {
+let _menuList = [...menuList];
+_menuList[index].qty -= 1;
+setMenuList(_menuList);
+
+let newTotal = totalPrice - _menuList[index].price;
+setTotalPrice(newTotal);
+};
+
+
+
+    // const  getUserLoginData = () => {
+    //      // read data from local storage
+    //         let token = localStorage.getItem("batch64token");
+    //             if (token == null) {
+    //                 return false;
+    //             } else {
+    //                 // decode a jwt token =>
+    //             try {
+    //                 let result = jwtDecode(token);
+    //                  return result;
+    //             } catch (error) {
+    //                   // remove a token from localStorage
+    //                 localStorage.removeItem("batch64token");
+    //                 return false;
+    //             }
+    //         }
+    // }
+
+
+   
 
 
    
@@ -100,36 +161,11 @@ function Restaurent() {
 
 
 
-       // useStae
-       let [rDetails, setRDetails] = useState({...initRestaurant});
-       let [restDetailsToggle, setRestDetailsToggle] = useState(true);
-       // const [user,setUser] = useState(true)
-       let [user, setUser] = useState(getUserLoginData());
-       const [menuList, setMenuList] = useState([]);
-       let [totalPrice, setTotalPrice] = useState(0);
+      
 
 
 
-       const addItem = (index) => {
-        let _menuList = [..._menuList]; // re-create array
-            _menuList[index].qty += 1;
-            _menuList(_menuList);
-
-            let newTotal = totalPrice + _menuList[index].price;
-            setTotalPrice(newTotal);
-  };
-
-
-
-  let removeItem = (index) => {
-    let _menuList = [...menuList];
-    _menuList[index].qty -= 1;
-    setMenuList(_menuList);
-
-    let newTotal = totalPrice - _menuList[index].price;
-    setTotalPrice(newTotal);
-  };
-
+       
 
 
     
@@ -338,6 +374,17 @@ function Restaurent() {
               <CarouselGallery rDetails={rDetails}></CarouselGallery>
 
                         {/* ImageGallery And End */}
+
+
+                        {/* Header */}
+                        <div className="row justify-content-center">
+                            <Header bg="bg-danger" />
+                        </div>
+
+                        {/* Header  End */}
+
+
+
 
 
 
