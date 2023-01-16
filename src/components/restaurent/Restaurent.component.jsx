@@ -2,8 +2,6 @@ import React, { Fragment,useState,useEffect } from 'react'
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
 
 
 
@@ -12,8 +10,8 @@ import { Carousel } from "react-responsive-carousel";
 import ImageGallery from './ImageGallery/ImageGallery.compnent';
 import {Overview,Contact} from './Contact-And-Overview/Overview-and-Contact.component'
 import CarouselGallery from './Carousel/Carousel.component'
-// import PaymentSection from './AddAndRemove/AddAndRemove.component'
-// import AddAndRemoveItems from './AddAndRemove/AddAndRemove.component'
+import PaymentSection from './AddAndRemove/AddAndRemove.component'
+import AddAndRemoveItems from './AddAndRemove/AddAndRemove.component'
 import Header from '../common/Header.componet'
 
 
@@ -91,18 +89,6 @@ function Restaurent() {
         }
       };
 
-      const addItem = (index) => {
-        let _menuList = [..._menuList]; // re-create array
-            _menuList[index].qty += 1;
-            _menuList(_menuList);
-    
-            let newTotal = totalPrice + _menuList[index].price;
-            setTotalPrice(newTotal);
-         };
-    
-
-
-
       const getMenuItems = async () => {
         let url = `http://localhost:5003/api/get-menu-items/${id}`;
         let { data } = await axios.get(url);
@@ -117,37 +103,84 @@ function Restaurent() {
 
 
 
-  
+      const addItem = (index) => {
+        let _menuList = [...menuList]; // re-create array
+            _menuList[index].qty += 1;
+            setMenuList(_menuList);
+    
+            let newTotal = totalPrice + _menuList[index].price;
+            setTotalPrice(newTotal);
+         };
+    
 
 
-let removeItem = (index) => {
-let _menuList = [...menuList];
-_menuList[index].qty -= 1;
-setMenuList(_menuList);
+        const removeItem = (index) => {
+            let _menuList = [...menuList];
+            _menuList[index].qty -= 1;
+            setMenuList(_menuList);
 
-let newTotal = totalPrice - _menuList[index].price;
-setTotalPrice(newTotal);
-};
+            let newTotal = totalPrice - _menuList[index].price;
+            setTotalPrice(newTotal);
+        };
+
+
+        let makePayment = async () => {
+            let userOrder = menuList.filter((menu) => menu.qty > 0);
+        
+            let url = "http://localhost:5003/api/gen-order-id";
+            let { data } = await axios.post(url, { amount: totalPrice });
+        
+            if (data.status === false) {
+              alert("Unable to gen order id");
+              return false;
+            }
+            let { order } = data;
+        
+            var options = {
+              key: "rzp_test_RB0WElnRLezVJ5", // Enter the Key ID generated from the Dashboard
+              amount: order.amount, // rupee to paisa
+              currency: order.currency,
+              name: "Zomato Order",
+              description: "Make payment for your orders",
+              image:
+                "https://www.freelogovectors.net/wp-content/uploads/2016/12/zomato-logo-785x785.png",
+              order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              handler: async function (response) {
+                var verifyData = {
+                  payment_id: response.razorpay_payment_id,
+                  order_id: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
+                  name: user.name,
+                  mobile: 9999999999,
+                  email: user.email,
+                  order_list: userOrder,
+                  totalAmount: totalPrice,
+                };
+                let { data } = await axios.post(
+                  "http://localhost:5003/api/verify-payment",
+                  verifyData
+                );
+                if (data.status === true) {
+                  alert("payment completed successfully");
+                  window.location.assign("/");
+                } else {
+                  alert("payment fails");
+                }
+              },
+              prefill: {
+                name: user.name,
+                email: user.email,
+                contact: "9999999999",
+              },
+            };
+        
+            var rzp1 = window.Razorpay(options);
+            rzp1.open();
+          };
 
 
 
-    // const  getUserLoginData = () => {
-    //      // read data from local storage
-    //         let token = localStorage.getItem("batch64token");
-    //             if (token == null) {
-    //                 return false;
-    //             } else {
-    //                 // decode a jwt token =>
-    //             try {
-    //                 let result = jwtDecode(token);
-    //                  return result;
-    //             } catch (error) {
-    //                   // remove a token from localStorage
-    //                 localStorage.removeItem("batch64token");
-    //                 return false;
-    //             }
-    //         }
-    // }
+   
 
 
    
@@ -184,6 +217,8 @@ setTotalPrice(newTotal);
 
     return(
         <Fragment>
+
+                {/* <PaymentSection user={user} /> */}
 
                 <div
                     className="modal fade"
@@ -276,72 +311,10 @@ setTotalPrice(newTotal);
 
           
 
-                {/* <AddAndRemoveItems rDetails={rDetails} menuList={menuList} removeItem ={removeItem} addItem={addItem}/> */}
+                <AddAndRemoveItems rDetails={rDetails} menuList={menuList} removeItem ={removeItem} addItem={addItem} totalPrice={totalPrice}/>
 
 
-                <div
-          className="modal fade"
-          id="modalMenuList"
-          aria-hidden="true"
-          aria-labelledby="exampleModalToggleLabel"
-          tabIndex="-1"
-      >
-          <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalToggleLabel">{rDetails.name}</h5>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>        
-                </div>
-                <div className="modal-body ">
-                    {menuList.map((menu, index)=>{
-
-                      return   <div className="row p-2" key={menu._id}>
-
-                                     <div className="col-8">
-                                          <p className="mb-1 h6">{menu.name}</p>
-                                          <p className="mb-1">{menu.price}</p>
-                                          <p className="small text-muted">{menu.description}</p>
-                                      </div>
-                                      
-                                      <div className="col-4 d-flex justify-content-end">
-                                          <img src={"/images/" + menu.image} alt="" />
-
-                                              {menu.qty === 0 ? (  <button
-                                                                    className="btn btn-primary btn-sm add"
-                                                                    onClick={() => addItem(index)}
-                                                                >
-                                                                        Add
-                                                                    </button> ) :
-
-                                                                 ( <div className="order-item-count section ">
-                                                                       <span
-                                                                          className="hand"
-                                                                          onClick={() => removeItem(index)}
-                                                                        >
-                                                                            -
-                                                                        </span>
-                                                                        <span>{menu.qty}</span>
-                                                                        <span
-                                                                          className="hand"
-                                                                          onClick={() => addItem(index)}
-                                                                        >
-                                                                                  +
-                                                                        </span>
-
-                                                                      </div>  )}
-
-                                      </div>
-                                </div>
-                      })}
-                </div>
-              </div>
-          </div>
-      </div>
+             
 
 
 

@@ -1,40 +1,46 @@
 import React, { Fragment } from "react";
 
 
-function PaymentSection() {
+function PaymentSection({user}) {
     return(
         <Fragment>
-            <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalToggleLabel2">
-                            name
-                        </h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                 <div className="modal-body">
-                    <div className="mb-3">
-                        <label
-                            htmlFor="exampleFormControlInput1"
-                            className="form-label"
-                        >
-                            Full Name
-                        </label>
+            <div
+                    className="modal fade"
+                    id="modalUserDetails"
+                    aria-hidden="true"
+                    aria-labelledby="exampleModalToggleLabel2"
+                    tabIndex="-1"
+                >
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalToggleLabel2">name</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                            </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label
+                                htmlFor="exampleFormControlInput1"
+                                className="form-label"
+                            >
+                                Full Name
+                            </label>
                         <input
                             type="text"
                             className="form-control"
                             id="exampleFormControlInput1"
                             placeholder="Enter full Name"
-                            // value={user.name}
+                            value={user.name}
                             onChange={() => {}}
                             disabled
                         />
                     </div>
-                <div className="mb-3">
+                    <div className="mb-3">
                         <label
                             htmlFor="exampleFormControlInput1"
                             className="form-label"
@@ -46,11 +52,11 @@ function PaymentSection() {
                             className="form-control"
                             id="exampleFormControlInput1"
                             placeholder="name@example.com"
-                            // value={user.email}
+                            value={user.email}
                             onChange={() => {}}
                             disabled
                         />
-                </div>
+                    </div>
                     <div className="mb-3">
                         <label
                             htmlFor="exampleFormControlTextarea1"
@@ -67,23 +73,21 @@ function PaymentSection() {
                         ></textarea>
                     </div>
                 </div>
-                <div className="modal-footer">
-                        <button
-                            className="btn btn-danger"
-                            data-bs-target="#modalMenuList"
-                            data-bs-toggle="modal"
-                        >
-                            Back
-                        </button>
-                        <button 
-                            className="btn btn-success" 
-                            // onClick={makePayment}
-                            
+                    <div className="modal-footer">
+                             <button
+                                className="btn btn-danger"
+                                data-bs-target="#modalMenuList"
+                                data-bs-toggle="modal"
                             >
-                                Pay Now
-                        </button>
+                                Back
+                            </button>
+                            <button className="btn btn-success" >
+                                 Pay Now
+                            </button>
+                    </div>
                 </div>
-          </div>
+                </div>
+            </div>
         </Fragment>
     )
 }
