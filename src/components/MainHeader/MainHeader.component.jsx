@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 
-// import Header from '../common/Header';
+import Header from '../common/Header.componet';
 
 function MainHeader() {
 
@@ -27,8 +27,8 @@ function MainHeader() {
 
     return(
         <Fragment>
-            {/* <Header/> */}
             <section className="row main-section align-content-start">
+              <Header/>
                 <section className="col-12 d-flex flex-column align-items-center justify-content-center">
                          <p className="brand-name fw-bold my-lg-2 mb-0">e!</p>
                         <p className="h1 text-white my-3 text-center">Find the best restaurants, cafés, and bars</p>    

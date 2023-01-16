@@ -84,8 +84,6 @@ function PaymentSection() {
                         </button>
                 </div>
           </div>
-            
-
         </Fragment>
     )
 }

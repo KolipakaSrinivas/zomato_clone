@@ -4,14 +4,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
-
+import Header from '../common/Header.componet';
 import SearchResult from './SearchResult/SearchResult.component'
 import SearchFilter from './SearchFilter/SearchFilter.component'
 
 function QuickSearch() {
 
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { meal_id } = useParams();
     
 
@@ -123,6 +123,7 @@ function QuickSearch() {
 
     return(
         <Fragment>
+          <Header bg="bg-danger" />
             <div className="row">
                  <div className="col-12 px-5 pt-4">
                     <p className="h3">Breakfast Places In Mumbai</p>
