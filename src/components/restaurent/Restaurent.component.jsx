@@ -2,14 +2,19 @@ import React, { Fragment,useState,useEffect } from 'react'
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
+
+
+
+
 
 
 
 import ImageGallery from './ImageGallery/ImageGallery.compnent';
 import {Overview,Contact} from './Contact-And-Overview/Overview-and-Contact.component'
-import CarouselGallery from './Carousel/Carousel.component'
-import PaymentSection from './AddAndRemove/AddAndRemove.component'
-import AddAndRemoveItems from './AddAndRemove/AddAndRemove.component'
+// import CarouselGallery from './Carousel/Carousel.component'
+// import AddAndRemoveItems from './AddAndRemove/AddAndRemove.component'
 import Header from '../common/Header.componet'
 
 
@@ -35,11 +40,15 @@ function Restaurent() {
           }
         }
       };
-
+    
+    
       let [user, setUser] = useState(getUserLoginData());
 
-
-    let initRestaurant = {
+      // console.log(user)
+    
+      let { id } = useParams();
+    
+      let initRestaurant = {
         aggregate_rating: "",
         city: "",
         city_id: 0,
@@ -56,28 +65,13 @@ function Restaurent() {
         thumb: [],
         _id: "",
       };
-
-
-    // useParams
-    let { id } = useParams();
-    // console.log(id)
-
-
-     // useStae
-     let [rDetails, setRDetails] = useState({...initRestaurant});
-     let [restDetailsToggle, setRestDetailsToggle] = useState(true);
-     // const [user,setUser] = useState(true)
-    //  let [user, setUser] = useState(getUserLoginData());
-     const [menuList, setMenuList] = useState([]);
-     let [totalPrice, setTotalPrice] = useState(0);
-
-
-
-
-
-    // function
-
-    let getRestaurantDetails = async () => {
+    
+      let [restDetailsToggle, setRestDetailsToggle] = useState(true);
+      let [menuList, setMenuList] = useState([]);
+      let [rDetails, setRDetails] = useState({ ...initRestaurant });
+      let [totalPrice, setTotalPrice] = useState(0);
+    
+      let getRestaurantDetails = async () => {
         let url = "http://localhost:5003/api/get-restaurant-details-by-id/" + id;
         let { data } = await axios.get(url);
         if (data.status === true) {
@@ -86,110 +80,98 @@ function Restaurent() {
           setRDetails({ ...data.initRestaurant });
         }
       };
-
-      const getMenuItems = async () => {
+    
+      let getMenuItems = async () => {
         let url = `http://localhost:5003/api/get-menu-items/${id}`;
         let { data } = await axios.get(url);
-             console.log(data);
+        console.log(data);
         if (data.status === true) {
-            setMenuList([...data.menu_items]);
+          setMenuList([...data.menu_items]);
         } else {
-            setMenuList([]);
+          setMenuList([]);
         }
-            setTotalPrice(0);
-  };
-
-
-
-      const addItem = (index) => {
+        setTotalPrice(0);
+      };
+    
+      let addItem = (index) => {
         let _menuList = [...menuList]; // re-create array
-            _menuList[index].qty += 1;
-            setMenuList(_menuList);
+        _menuList[index].qty += 1;
+        setMenuList(_menuList);
     
-            let newTotal = totalPrice + _menuList[index].price;
-            setTotalPrice(newTotal);
-         };
+        let newTotal = totalPrice + _menuList[index].price;
+        setTotalPrice(newTotal);
+      };
     
-
-
-        const removeItem = (index) => {
-            let _menuList = [...menuList];
-            _menuList[index].qty -= 1;
-            setMenuList(_menuList);
-
-            let newTotal = totalPrice - _menuList[index].price;
-            setTotalPrice(newTotal);
-        };
-
-
-        let makePayment = async () => {
-            let userOrder = menuList.filter((menu) => menu.qty > 0);
-        
-            let url = "http://localhost:5003/api/gen-order-id";
-            let { data } = await axios.post(url, { amount: totalPrice });
-        
-            if (data.status === false) {
-              alert("Unable to gen order id");
-              return false;
-            }
-            let { order } = data;
-        
-            var options = {
-              key: "rzp_test_RB0WElnRLezVJ5", // Enter the Key ID generated from the Dashboard
-              amount: order.amount, // rupee to paisa
-              currency: order.currency,
-              name: "Zomato Order",
-              description: "Make payment for your orders",
-              image:
-                "https://www.freelogovectors.net/wp-content/uploads/2016/12/zomato-logo-785x785.png",
-              order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-              handler: async function (response) {
-                var verifyData = {
-                  payment_id: response.razorpay_payment_id,
-                  order_id: response.razorpay_order_id,
-                  signature: response.razorpay_signature,
-                  name: user.name,
-                  mobile: 9999999999,
-                  email: user.email,
-                  order_list: userOrder,
-                  totalAmount: totalPrice,
-                };
-                let { data } = await axios.post(
-                  "http://localhost:5003/api/verify-payment",
-                  verifyData
-                );
-                if (data.status === true) {
-                  alert("payment completed successfully");
-                  window.location.assign("/");
-                } else {
-                  alert("payment fails");
-                }
-              },
-              prefill: {
-                name: user.name,
-                email: user.email,
-                contact: "9999999999",
-              },
+    
+      let removeItem = (index) => {
+        let _menuList = [...menuList];
+        _menuList[index].qty -= 1;
+        setMenuList(_menuList);
+    
+        let newTotal = totalPrice - _menuList[index].price;
+        setTotalPrice(newTotal);
+      };
+    
+    
+      let makePayment = async () => {
+        let userOrder = menuList.filter((menu) => menu.qty > 0);
+    
+        let url = "http://localhost:5003/api/gen-order-id";
+        let { data } = await axios.post(url, { amount: totalPrice });
+    
+        if (data.status === false) {
+          alert("Unable to gen order id");
+          return false;
+        }
+        let { order } = data;
+    
+        var options = {
+          key: "rzp_test_RB0WElnRLezVJ5", // Enter the Key ID generated from the Dashboard
+          amount: order.amount, // rupee to paisa
+          currency: order.currency,
+          name: "Zomato Order",
+          description: "Make payment for your orders",
+          image:
+            "https://www.freelogovectors.net/wp-content/uploads/2016/12/zomato-logo-785x785.png",
+          order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+          handler: async function (response) {
+            var verifyData = {
+              payment_id: response.razorpay_payment_id,
+              order_id: response.razorpay_order_id,
+              signature: response.razorpay_signature,
+              name: user.name,
+              mobile: 9999999999,
+              email: user.email,
+              order_list: userOrder,
+              totalAmount: totalPrice,
             };
-        
-            var rzp1 = window.Razorpay(options);
-            rzp1.open();
-          };
-
-
-
-   
-    //   useEffect
-
-    useEffect(()=>{
-        getRestaurantDetails()
-
-    },[])
-
-    console.log(rDetails)
-
-
-
+            let { data } = await axios.post(
+              "http://localhost:5003/api/verify-payment",
+              verifyData
+            );
+            if (data.status === true) {
+              alert("payment completed successfully");
+              window.location.assign("/");
+            } else {
+              alert("payment fails");
+            }
+          },
+          prefill: {
+            name: user.name,
+            email: user.email,
+            contact: "9999999999",
+          },
+        };
+    
+        var rzp1 = window.Razorpay(options);
+        rzp1.open();
+      };
+    
+      useEffect(() => {
+        getRestaurantDetails();
+      }, []); // once i.e on component load
+    
+    
 
 
     return(
@@ -197,108 +179,215 @@ function Restaurent() {
 
                         {/* makePayment */}
 
-                <div
-                    className="modal fade"
-                    id="modalUserDetails"
-                    aria-hidden="true"
-                    aria-labelledby="exampleModalToggleLabel2"
-                    tabIndex="-1"
-                >
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalToggleLabel2">name</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"
-                                    ></button>
+                        <div
+                            className="modal fade"
+                            id="modalUserDetails"
+                            aria-hidden="true"
+                            aria-labelledby="exampleModalToggleLabel2"
+                            tabIndex="-1"
+                        >
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                         <h5 className="modal-title" id="exampleModalToggleLabel2">name</h5>
+                                            <button
+                                                type="button"
+                                                className="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                            ></button>
+                                    </div>
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                    <label
+                                        htmlFor="exampleFormControlInput1"
+                                        className="form-label"
+                                    >
+                                                Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="exampleFormControlInput1"
+                                        placeholder="Enter full Name"
+                                        value={user.name}
+                                        onChange={() => {}}
+                                        disabled
+                                    />
                             </div>
-                    <div className="modal-body">
-                        <div className="mb-3">
-                            <label
-                                htmlFor="exampleFormControlInput1"
-                                className="form-label"
-                            >
-                                Full Name
-                            </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="exampleFormControlInput1"
-                            placeholder="Enter full Name"
-                            value={user.name}
-                            onChange={() => {}}
-                            disabled
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label
-                            htmlFor="exampleFormControlInput1"
-                            className="form-label"
-                        >
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="exampleFormControlInput1"
-                            placeholder="name@example.com"
-                            value={user.email}
-                            onChange={() => {}}
-                            disabled
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label
-                            htmlFor="exampleFormControlTextarea1"
-                            className="form-label"
-                        >
-                            Address
-                        </label>
-                        <textarea
-                            className="form-control"
-                            id="exampleFormControlTextarea1"
-                            rows="3"
-                            value="Nashik"
-                            onChange={() => {}}
-                        ></textarea>
-                    </div>
-                </div>
-                    <div className="modal-footer">
-                             <button
-                                className="btn btn-danger"
-                                data-bs-target="#modalMenuList"
-                                data-bs-toggle="modal"
-                            >
-                                Back
-                            </button>
-                            <button className="btn btn-success" 
-                            onClick={()=>(makePayment())}
-                            >
-                                 Pay Now
-                            </button>
-                    </div>
-                </div>
-                </div>
-            </div>
-                         {/* makePayment */}
+                            <div className="mb-3">
+                                <label
+                                    htmlFor="exampleFormControlInput1"
+                                    className="form-label"
+                                >
+                                     Email
+                                </label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="exampleFormControlInput1"
+                                    placeholder="name@example.com"
+                                    value={user.email}
+                                    onChange={() => {}}
+                                    disabled
+                                />
+                            </div>
+                                <div className="mb-3">
+                                    <label
+                                        htmlFor="exampleFormControlTextarea1"
+                                        className="form-label"
+                                    >
+                                                Address
+                                    </label>
+                                    <textarea
+                                        className="form-control"
+                                        id="exampleFormControlTextarea1"
+                                        rows="3"
+                                        value="Nashik"
+                                        onChange={() => {}}
+                                    ></textarea>
+                            </div>
+                            </div>
+                                <div className="modal-footer">
+                                    <button
+                                        className="btn btn-danger"
+                                        data-bs-target="#modalMenuList"
+                                        data-bs-toggle="modal"
+                                    >
+                                        Back
+                                    </button>
+                                    <button 
+                                        className="btn btn-success" 
+                                        onClick={makePayment()}
+                                    >
+                                             Pay Now
+                                    </button>
+                                 </div>
+                        </div>
+                        </div>
+                         </div>
+
+                
+                         {/* makePayment End */}
 
 
 
                                     {/* AddAndRemove_Menu_Items */}
 
 
-                <AddAndRemoveItems rDetails={rDetails} menuList={menuList} removeItem ={removeItem} addItem={addItem} totalPrice={totalPrice}/>
+                {/* <AddAndRemoveItems rDetails={rDetails} menuList={menuList} removeItem ={removeItem} addItem={addItem} totalPrice={totalPrice}/> */}
 
+                <div
+        className="modal fade"
+        id="modalMenuList"
+        aria-hidden="true"
+        aria-labelledby="exampleModalToggleLabel"
+        tabIndex="-1"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalToggleLabel">
+                {rDetails.name}
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body ">
+              {menuList.map((menu, index) => {
+                return (
+                  <div className="row p-2" key={menu._id}>
+                    <div className="col-8">
+                      <p className="mb-1 h6">{menu.name}</p>
+                      <p className="mb-1">{menu.price}</p>
+                      <p className="small text-muted">{menu.description}</p>
+                    </div>
+                    <div className="col-4 d-flex justify-content-end">
+                      <div className="menu-food-item">
+                        <img src={"/images/" + menu.image} alt="" />
+
+                        {menu.qty === 0 ? (
+                          <button
+                            className="btn btn-primary btn-sm add"
+                            onClick={() => addItem(index)}
+                          >
+                            Add
+                          </button>
+                        ) : (
+                          <div className="order-item-count section ">
+                            <span
+                              className="hand"
+                              onClick={() => removeItem(index)}
+                            >
+                              -
+                            </span>
+                            <span>{menu.qty}</span>
+                            <span
+                              className="hand"
+                              onClick={() => addItem(index)}
+                            >
+                              +
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <hr className=" p-0 my-2" />
+                  </div>
+                );
+              })}
+
+              <div className="d-flex justify-content-between">
+                <h3>Total {totalPrice}</h3>
+                <button
+                  className="btn btn-danger"
+                  data-bs-target="#modalUserDetails"
+                  data-bs-toggle="modal"
+                >
+                  Process
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            
                                     {/* AddAndRemove_Menu_Items */}
 
 
 
                         {/* ImageGallery */}
 
-              <CarouselGallery rDetails={rDetails}></CarouselGallery>
+              {/* <CarouselGallery rDetails={rDetails}></CarouselGallery> */}
+
+              <div
+            className="modal fade"
+            id="modalGallery"
+            tabIndex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div className="modal-dialog modal-lg " style={{ height: "75vh" }}>
+                <div className="modal-content">
+                  <div className="modal-body h-75">
+                      <Carousel showThumbs={false} infiniteLoop={true}>
+                          {rDetails.thumb.map((value, index) => { 
+                            return (
+                              <div key={index} className="w-100">
+                              <img src={"/images/" + value} />
+                              </div>
+                          );
+                        })}
+                        </Carousel>                
+                  </div>
+                </div>
+            </div>
+        </div>
 
                         {/* ImageGallery And End */}
 
@@ -306,6 +395,7 @@ function Restaurent() {
 
 
                         {/* Header */}
+
                         <div className="row justify-content-center">
                             <Header bg="bg-danger" />
                         </div>
@@ -347,7 +437,7 @@ function Restaurent() {
 
                                             {/* Button */}
 
-                                {user === true ? (
+                                {user === false ? (
                                         <button disabled className="btn btn-danger align-self-start">
                                                 Login to place order
                                         </button>
