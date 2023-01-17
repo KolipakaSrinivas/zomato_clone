@@ -57,21 +57,11 @@ function Header(props) {
         }
 
       };
-
-    
-
-
-
-
-
-
-
-
-
+    //   "606995426740-802fnm149kts3c4rsj0mjdl9dvlk1i7n.apps.googleusercontent.com"
 
     return(
         <Fragment>
-            <GoogleOAuthProvider clientId="606995426740-802fnm149kts3c4rsj0mjdl9dvlk1i7n.apps.googleusercontent.com">
+            <GoogleOAuthProvider clientId="739199133809-4qf0nemh1tcopgurkm3fl86eudeso8ea.apps.googleusercontent.com">
 
 
                 <div
@@ -81,7 +71,7 @@ function Header(props) {
                     aria-labelledby="exampleModalLabel"
                     aria-hidden="true"
                 >
-                    <div className="modal-dialog">
+                    <div className="modal-dialog" >
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h1 className="modal-title fs-5" id="exampleModalLabel"> Login </h1>

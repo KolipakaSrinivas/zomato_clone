@@ -5,8 +5,6 @@ import axios from 'axios';
 
 
 
-
-
 import ImageGallery from './ImageGallery/ImageGallery.compnent';
 import {Overview,Contact} from './Contact-And-Overview/Overview-and-Contact.component'
 import CarouselGallery from './Carousel/Carousel.component'
@@ -181,27 +179,6 @@ function Restaurent() {
 
 
    
-
-
-   
-
-
-   
-    
-    
-
-
-
-
-
-      
-
-
-
-       
-
-
-    
     //   useEffect
 
     useEffect(()=>{
@@ -218,7 +195,7 @@ function Restaurent() {
     return(
         <Fragment>
 
-                {/* <PaymentSection user={user} /> */}
+                        {/* makePayment */}
 
                 <div
                     className="modal fade"
@@ -297,49 +274,26 @@ function Restaurent() {
                             >
                                 Back
                             </button>
-                            <button className="btn btn-success" >
+                            <button className="btn btn-success" 
+                            onClick={()=>(makePayment())}
+                            >
                                  Pay Now
                             </button>
                     </div>
                 </div>
                 </div>
             </div>
+                         {/* makePayment */}
 
 
 
+                                    {/* AddAndRemove_Menu_Items */}
 
-
-          
 
                 <AddAndRemoveItems rDetails={rDetails} menuList={menuList} removeItem ={removeItem} addItem={addItem} totalPrice={totalPrice}/>
 
+                                    {/* AddAndRemove_Menu_Items */}
 
-             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    {/* <PaymentSection/> */}
 
 
                         {/* ImageGallery */}
@@ -349,23 +303,14 @@ function Restaurent() {
                         {/* ImageGallery And End */}
 
 
+
+
                         {/* Header */}
                         <div className="row justify-content-center">
                             <Header bg="bg-danger" />
                         </div>
 
                         {/* Header  End */}
-
-
-
-
-
-
-
-
-
-
-
 
             <div className="row justify-content-center">
                 <div className="col-10">
@@ -378,7 +323,7 @@ function Restaurent() {
 
                             {/* ImageGallery End */}
                         
-                        
+                                  {/* Contact And  Overview Toggle */}
                         
                         <div className="col-12">
                                 <h3 className="mt-4">{rDetails.name}</h3>    
@@ -397,6 +342,7 @@ function Restaurent() {
                                              Contact
                                     </li>
                                 </ul>
+                                {/* Contact And  Overview Toggle End */}
 
 
                                             {/* Button */}
