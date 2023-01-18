@@ -16,9 +16,6 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/quick-search/:meal_id' element={<FilterAndSearch/>}/>
         <Route path='/restaurant/:id' element={<RestaurantPage/>}/>
-
-
-
       </Routes>
     </div>
   )

@@ -3,8 +3,6 @@ import React from 'react'
 
 function AddAndRemoveItems({rDetails,menuList,totalPrice,addItem}) {
     return(
-
-
       <div
         className="modal fade"
         id="modalMenuList"
@@ -12,21 +10,21 @@ function AddAndRemoveItems({rDetails,menuList,totalPrice,addItem}) {
         aria-labelledby="exampleModalToggleLabel"
         tabIndex="-1"
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalToggleLabel">
-                {rDetails.name}
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body ">
-              {menuList.map((menu, index) => {
+         <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+                <div className="modal-header">
+                   <h5 className="modal-title" id="exampleModalToggleLabel">
+                      {rDetails.name}
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                </div>
+              <div className="modal-body ">
+                 {menuList.map((menu, index) => {
                 return (
                   <div className="row p-2" key={menu._id}>
                     <div className="col-8">
@@ -34,7 +32,7 @@ function AddAndRemoveItems({rDetails,menuList,totalPrice,addItem}) {
                       <p className="mb-1">{menu.price}</p>
                       <p className="small text-muted">{menu.description}</p>
                     </div>
-                    <div className="col-4 d-flex justify-content-end">
+                  <div className="col-4 d-flex justify-content-end">
                       <div className="menu-food-item">
                         <img src={"/images/" + menu.image} alt="" />
 
@@ -83,15 +81,6 @@ function AddAndRemoveItems({rDetails,menuList,totalPrice,addItem}) {
           </div>
         </div>
       </div>
-
-       
-
-
-
-
-
-      
-        
     )
 }
 

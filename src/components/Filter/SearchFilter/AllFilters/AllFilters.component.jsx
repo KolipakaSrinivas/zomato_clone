@@ -87,6 +87,8 @@ const Cuisine = ({getFilterResult}) => {
 
 
 
+
+
 const CostForTwo = ({getFilterResult}) => {
 
     return(
@@ -164,6 +166,8 @@ const CostForTwo = ({getFilterResult}) => {
                 </div>
     )
 }
+
+
 
 
 

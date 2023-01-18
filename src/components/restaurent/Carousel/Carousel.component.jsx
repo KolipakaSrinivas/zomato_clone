@@ -8,7 +8,6 @@ import { Carousel } from "react-responsive-carousel";
 function CarouselGallery(props) {
 
   const {rDetails} = props
-  console.log(props)
     return(
          <div
             className="modal fade"

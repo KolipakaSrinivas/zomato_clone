@@ -48,7 +48,7 @@ function MainHeader() {
                         <input
                             type="text"
                             className="form-control py-2 px-3"
-                             placeholder="Search for restaurants"
+                            placeholder="Search for restaurants"
                         />
                         </div>
                     </div>

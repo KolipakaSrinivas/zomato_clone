@@ -26,8 +26,6 @@ const  Overview  = ({rDetails}) => {
 
 
 
-
-
 const Contact = ({rDetails}) => {
     return(
         <div className="over-view">

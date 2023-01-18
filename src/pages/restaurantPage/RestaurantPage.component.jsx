@@ -7,9 +7,8 @@ import Restaurant from '../../components/restaurent/Restaurent.component'
 function RestaurantPage() {
     return(
         <Restaurant/>
-    
 
     )
 }
 
-export default Restaurant
+export default RestaurantPage
