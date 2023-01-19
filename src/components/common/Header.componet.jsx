@@ -39,7 +39,7 @@ function Header(props) {
         // store
         localStorage.setItem("batch64token", token);
         alert("login in successfully");
-        window.location.assign("/");
+        // window.location.assign("/");
 
       };
 

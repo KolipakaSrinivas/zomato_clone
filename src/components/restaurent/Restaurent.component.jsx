@@ -1,9 +1,7 @@
 import React, { Fragment,useState,useEffect } from 'react'
 import { useParams } from "react-router-dom";
-import Header from '../common/Header.componet'
+import Header from '../../components/common/Header.componet'
 import axios from 'axios';
-
-
 
 
 
@@ -15,26 +13,28 @@ import PaymentSection from './PaymentSection/PaymentSection.component'
 
 
 
+
 function Restaurent() {
 
 
-    let getUserLoginData = () => {
-      // read data from local storage
-      let token = localStorage.getItem("batch64token");
-          if (token == null) {
-                return false;
-          } else {
-               // decode a jwt token =>
-            try {
-              let result = jwtDecode(token);
-                return result;
-            } catch (error) {
-              // remove a token from localStorage
-               localStorage.removeItem("batch64token");
-               return false;
-            }
-          }
-    };
+  let getUserLoginData = () => {
+    // read data from local storage
+    let token = localStorage.getItem("batch64token");
+    if (token == null) {
+      return false;
+    } else {
+      // decode a jwt token =>
+      try {
+        let result = jwtDecode(token);
+        return result;
+      } catch (error) {
+        // remove a token from localStorage
+        // localStorage.removeItem("batch64token");
+        return false;
+      }
+    }
+  };
+
     
 
       let [user, setUser] = useState(getUserLoginData());
@@ -237,7 +237,7 @@ function Restaurent() {
                                       {/* Contact And  Overview Toggle End */}
 
                                             {/* Button */}
-                                                {user === false ? (
+                                                {user === true ? (
                                                       <button disabled className="btn btn-danger align-self-start">
                                                          Login to place order
                                                       </button>
@@ -269,4 +269,7 @@ function Restaurent() {
 }
 
 export default Restaurent
+
+
+
 
