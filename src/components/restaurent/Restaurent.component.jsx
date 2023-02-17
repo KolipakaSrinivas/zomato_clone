@@ -42,6 +42,7 @@ function Restaurent() {
 
         // useParams
       let { id } = useParams();
+      console.log(id)
     
 
 
